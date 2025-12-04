@@ -2,9 +2,9 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, ChevronDown, Mail, Phone, Linkedin, Facebook, Twitter, Instagram } from 'lucide-react';
+import { Menu, X, ChevronDown, Mail, Linkedin } from 'lucide-react';
 import Image from 'next/image';
-import { QuoteDialog } from '@/components/quote-dialog';
+import projects from '@/app/data/projects';
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,35 +19,20 @@ export function Navigation() {
     {
       name: 'Projects',
       href: '/projects',
-      dropdown: [
-        { name: 'Platform Member Wet Welding', href: '/projects/platform-member-wet-welding', description: 'Emergency underwater welding repairs' },
-        { name: 'ROV Pipeline Inspection', href: '/projects/rov-pipeline-inspection', description: 'Comprehensive pipeline assessment' },
-        { name: 'Power Plant – Travelling Band Screen Repairs', href: '/projects/power-plant-band-screen-repairs', description: 'Power plant intake system repairs' },
-        { name: 'Hyperbaric Pipeline Repair', href: '/projects/hyperbaric-pipeline-repair', description: 'Critical pipeline repair operations' },
-        { name: 'FPSO Karish – Umbilical Operations', href: '/projects/fpso-karish-umbilical', description: 'FPSO umbilical maintenance' },
-        { name: 'Outfall Blanking – Hatta Dam', href: '/projects/outfall-blanking-hatta-dam', description: 'Dam outfall system operations' },
-        { name: 'Seawater Intake Rectifications', href: '/projects/seawater-intake-rectifications', description: 'Intake system maintenance' },
-        { name: 'Dubai Canal – Bridge Inspections', href: '/projects/dubai-canal-bridge-inspections', description: 'Bridge inspection and maintenance' },
-        { name: 'Abu Dhabi Port Inspections', href: '/projects/abu-dhabi-port-inspections', description: 'Port infrastructure assessment' },
-        { name: 'Al Jazeera Quay Wall Inspections', href: '/projects/al-jazeera-quay-wall-inspections', description: 'Quay wall structural assessment' },
-        { name: 'Sidescan Sonar - Pipeline Freespan', href: '/projects/sidescan-sonar-pipeline-freespan', description: 'Pipeline freespan analysis' },
-        { name: 'Salvage Operations', href: '/projects/salvage-operations', description: 'Marine salvage and recovery' },
-        { name: 'Buoy Cleaning And Inspection', href: '/projects/buoy-cleaning-inspection', description: 'Navigation buoy maintenance' },
-        { name: 'Offshore Platform Decommissioning', href: '/projects/offshore-platform-decommissioning', description: 'Platform decommissioning services' },
-        { name: 'Spudcan Repairs', href: '/projects/spudcan-repairs', description: 'Jack-up rig spudcan repairs' },
-        { name: 'Underwater Welding of Padeyes', href: '/projects/underwater-welding-padeyes', description: 'Structural padeye welding' },
-        { name: 'Daughtercraft Diving', href: '/projects/daughtercraft-diving', description: 'Specialized diving operations' },
-        { name: 'Surf Abu Dhabi', href: '/projects/surf-abu-dhabi', description: 'Marine construction project' },
-      ]
+      dropdown: projects.map(project => ({
+        name: project.title,
+        href: `/projects/${project.slug}`,
+        description: project.description.split('.')[0]
+      }))
     },
-    { 
-      name: 'Services', 
+    {
+      name: 'Services',
       href: '/services',
       dropdown: [
         { name: 'Diving Services', href: '/services/diving-services', description: 'Professional commercial diving operations' },
         { name: 'Marine and Civils', href: '/services/marine-and-civils', description: 'Marine civil engineering solutions' },
         { name: 'ROV Services', href: '/services/rov-services', description: 'Advanced remotely operated vehicle services' },
-        { name: 'Wet and Hyperbaric Welding Services', href: '/services/wet-hyperbaric-welding', description: 'Specialized underwater welding services' },
+        { name: 'Wet and Hyperbaric Welding Services', href: '/services/wet-and-hyperbaric-services', description: 'Specialized underwater welding services' },
         { name: 'Survey', href: '/services/survey', description: 'Comprehensive marine survey services' },
       ]
     },
@@ -78,63 +63,29 @@ export function Navigation() {
 
   return (
     <>
-      {/* Top Contact Bar */}
       <div className="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-2 hidden md:block">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center text-sm">
-            {/* Contact Information */}
             <div className="flex items-center space-x-6">
-              <a 
-                href="mailto:operations@blusubsea.com" 
+              <a
+                href="mailto:operations@blusubsea.com"
                 className="flex items-center space-x-2 hover:text-blue-200 transition-colors duration-200 group"
               >
                 <Mail className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
                 <span className="font-medium">operations@blusubsea.com</span>
               </a>
-              <a 
-                href="tel:+14015550123" 
-                className="flex items-center space-x-2 hover:text-blue-200 transition-colors duration-200 group"
-              >
-                <Phone className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
-                <span className="font-medium">+1 (401) 555-0123</span>
-              </a>
             </div>
 
-            {/* Social Media Icons */}
             <div className="flex items-center space-x-4">
-              <span className="text-blue-200 text-xs font-medium">Follow Us:</span>
+              <span className="text-blue-200 text-xs font-medium">Connect:</span>
               <div className="flex space-x-3">
-                <a 
-                  href="https://linkedin.com/company/blusubsea" 
-                  target="_blank" 
+                <a
+                  href="https://www.linkedin.com/company/blu-subsea/"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 group"
                 >
                   <Linkedin className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
-                </a>
-                <a 
-                  href="https://facebook.com/blusubsea" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 group"
-                >
-                  <Facebook className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
-                </a>
-                <a 
-                  href="https://twitter.com/blusubsea" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 group"
-                >
-                  <Twitter className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
-                </a>
-                <a 
-                  href="https://instagram.com/blusubsea" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 group"
-                >
-                  <Instagram className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
                 </a>
               </div>
             </div>
@@ -142,7 +93,6 @@ export function Navigation() {
         </div>
       </div>
 
-      {/* Main Navigation */}
       <nav className="bg-white/95 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
@@ -161,12 +111,11 @@ export function Navigation() {
               </Link>
             </div>
 
-            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-1">
               {navigation.map((item) => (
                 <div key={item.name} className="relative">
                   {item.dropdown ? (
-                    <div 
+                    <div
                       className="relative"
                       onMouseEnter={() => handleMouseEnter(item.name)}
                       onMouseLeave={handleMouseLeave}
@@ -180,25 +129,22 @@ export function Navigation() {
                           activeDropdown === item.name ? 'rotate-180' : ''
                         }`} />
                       </Link>
-                      
-                      {/* Dropdown Menu */}
+
                       <div className={`absolute left-0 mt-1 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 ${
-                        activeDropdown === item.name 
-                          ? 'opacity-100 visible transform translate-y-0' 
+                        activeDropdown === item.name
+                          ? 'opacity-100 visible transform translate-y-0'
                           : 'opacity-0 invisible transform -translate-y-2'
                       } ${item.name === 'Projects' ? 'w-96' : 'w-80'}`}>
-                        
-                        {/* Dropdown Header */}
+
                         <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
                           <h3 className="text-white font-semibold text-lg">{item.name}</h3>
                           <p className="text-blue-100 text-sm mt-1">
                             {item.name === 'Services' ? 'Our comprehensive service offerings' : 'Featured project portfolio'}
                           </p>
                         </div>
-                        
-                        {/* Dropdown Items */}
+
                         <div className="max-h-96 overflow-y-auto dropdown-scroll">
-                          {item.dropdown.map((subItem, index) => (
+                          {item.dropdown.map((subItem) => (
                             <Link
                               key={subItem.name}
                               href={subItem.href}
@@ -218,10 +164,9 @@ export function Navigation() {
                             </Link>
                           ))}
                         </div>
-                        
-                        {/* Dropdown Footer */}
+
                         <div className="bg-gray-50 px-6 py-3 border-t border-gray-100">
-                          <Link 
+                          <Link
                             href={item.href}
                             className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors duration-200"
                           >
@@ -240,14 +185,8 @@ export function Navigation() {
                   )}
                 </div>
               ))}
-              <QuoteDialog>
-                <button className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl ml-4">
-                  Get Quote
-                </button>
-              </QuoteDialog>
             </div>
 
-            {/* Mobile menu button */}
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => setIsOpen(!isOpen)}
@@ -259,41 +198,23 @@ export function Navigation() {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
         <div className={`md:hidden transition-all duration-300 ease-in-out ${
           isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
         } overflow-hidden`}>
-          {/* Mobile Contact Info */}
           <div className="bg-gradient-to-r from-blue-900 to-blue-800 text-white px-4 py-3 border-t border-blue-700">
             <div className="space-y-2 text-sm">
-              <a 
-                href="mailto:operations@blusubsea.com" 
+              <a
+                href="mailto:operations@blusubsea.com"
                 className="flex items-center space-x-2 hover:text-blue-200 transition-colors duration-200"
               >
                 <Mail className="h-4 w-4" />
                 <span>operations@blusubsea.com</span>
               </a>
-              <a 
-                href="tel:+14015550123" 
-                className="flex items-center space-x-2 hover:text-blue-200 transition-colors duration-200"
-              >
-                <Phone className="h-4 w-4" />
-                <span>+1 (401) 555-0123</span>
-              </a>
               <div className="flex items-center space-x-3 pt-2">
-                <span className="text-blue-200 text-xs">Follow Us:</span>
+                <span className="text-blue-200 text-xs">Connect With Us:</span>
                 <div className="flex space-x-2">
-                  <a href="https://linkedin.com/company/blusubsea" target="_blank" rel="noopener noreferrer" className="p-1 rounded bg-white/10 hover:bg-white/20 transition-colors duration-200">
+                  <a href="https://www.linkedin.com/company/blu-subsea/" target="_blank" rel="noopener noreferrer" className="p-1 rounded bg-white/10 hover:bg-white/20 transition-colors duration-200">
                     <Linkedin className="h-3 w-3" />
-                  </a>
-                  <a href="https://facebook.com/blusubsea" target="_blank" rel="noopener noreferrer" className="p-1 rounded bg-white/10 hover:bg-white/20 transition-colors duration-200">
-                    <Facebook className="h-3 w-3" />
-                  </a>
-                  <a href="https://twitter.com/blusubsea" target="_blank" rel="noopener noreferrer" className="p-1 rounded bg-white/10 hover:bg-white/20 transition-colors duration-200">
-                    <Twitter className="h-3 w-3" />
-                  </a>
-                  <a href="https://instagram.com/blusubsea" target="_blank" rel="noopener noreferrer" className="p-1 rounded bg-white/10 hover:bg-white/20 transition-colors duration-200">
-                    <Instagram className="h-3 w-3" />
                   </a>
                 </div>
               </div>
@@ -317,7 +238,7 @@ export function Navigation() {
                     >
                       {item.name}
                       <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${
-                        (item.name === 'Services' && servicesOpen) || (item.name === 'Projects' && projectsOpen) 
+                        (item.name === 'Services' && servicesOpen) || (item.name === 'Projects' && projectsOpen)
                           ? 'rotate-180' : ''
                       }`} />
                     </button>
@@ -350,14 +271,6 @@ export function Navigation() {
                 )}
               </div>
             ))}
-            <QuoteDialog>
-              <button
-                className="block w-full px-3 py-3 text-base font-medium bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 mx-3 mt-4 text-center"
-                onClick={() => setIsOpen(false)}
-              >
-                Get Quote
-              </button>
-            </QuoteDialog>
           </div>
         </div>
       </nav>

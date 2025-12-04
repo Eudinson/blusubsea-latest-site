@@ -1,105 +1,171 @@
 'use client';
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Mail, User, Phone, MessageSquare, Send, CheckCircle2 } from 'lucide-react';
+import { toast } from 'sonner';
+import emailjs from '@emailjs/browser';
+import { useRef } from 'react';
 
-export function ContactForm() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    service: '',
-    message: '',
+const contactSchema = z.object({
+  full_name: z.string().min(2, 'Full name must be at least 2 characters').max(100, 'Full name is too long'),
+  email: z.string().email('Please enter a valid email address'),
+  contact: z.string().min(10, 'Contact number must be at least 10 digits').max(15, 'Contact number is too long'),
+  message: z.string().min(10, 'Message must be at least 10 characters').max(500, 'Message is too long')
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
+
+export default function ContactForm() {
+  const formRef = useRef<HTMLFormElement>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema)
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message! We will get back to you soon.');
-    setFormData({ name: '', email: '', company: '', service: '', message: '' });
-  };
+  const onSubmit = async (data: ContactFormData) => {
+    try {
+      const serviceId = process.env.NEXT_PUBLIC_SERVICE_ID;
+      const templateId = process.env.NEXT_PUBLIC_TEMPLATE_ID;
+      const userId = process.env.NEXT_PUBLIC_USER_ID;
 
-  const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+      if (!serviceId || !templateId || !userId) {
+        toast.error('Email service is not configured. Please contact support.');
+        return;
+      }
+
+      if (formRef.current) {
+        await emailjs.sendForm(serviceId, templateId, formRef.current, userId);
+        toast.success('Message sent successfully!', {
+          description: 'We will get back to you within 24 hours.',
+          icon: <CheckCircle2 className="w-5 h-5" />
+        });
+        reset();
+      }
+    } catch (error) {
+      console.error('Email send error:', error);
+      toast.error('Failed to send message', {
+        description: 'Please try again or contact us directly via phone.'
+      });
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <Label htmlFor="name">Full Name *</Label>
-          <Input
-            id="name"
-            type="text"
-            required
-            value={formData.name}
-            onChange={(e) => handleChange('name', e.target.value)}
-            className="mt-1"
-          />
-        </div>
-        <div>
-          <Label htmlFor="email">Email Address *</Label>
-          <Input
-            id="email"
-            type="email"
-            required
-            value={formData.email}
-            onChange={(e) => handleChange('email', e.target.value)}
-            className="mt-1"
-          />
-        </div>
-      </div>
-      
+    <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       <div>
-        <Label htmlFor="company">Company</Label>
-        <Input
-          id="company"
+        <label htmlFor="full_name" className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+          <User className="w-4 h-4 mr-2 text-blue-600" />
+          Full Name
+        </label>
+        <input
           type="text"
-          value={formData.company}
-          onChange={(e) => handleChange('company', e.target.value)}
-          className="mt-1"
+          id="full_name"
+          {...register('full_name')}
+          disabled={isSubmitting}
+          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed ${
+            errors.full_name ? 'border-red-500' : 'border-gray-300'
+          }`}
+          placeholder="John Doe"
         />
+        {errors.full_name && (
+          <p className="mt-1.5 text-sm text-red-600 flex items-center">
+            <span className="w-1 h-1 bg-red-600 rounded-full mr-2"></span>
+            {errors.full_name.message}
+          </p>
+        )}
       </div>
 
       <div>
-        <Label htmlFor="service">Service of Interest</Label>
-        <Select value={formData.service} onValueChange={(value) => handleChange('service', value)}>
-          <SelectTrigger className="mt-1">
-            <SelectValue placeholder="Select a service" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="subsea-engineering">Subsea Engineering</SelectItem>
-            <SelectItem value="marine-construction">Marine Construction</SelectItem>
-            <SelectItem value="marine-consultancy">Marine Consultancy</SelectItem>
-            <SelectItem value="maintenance-repair">Maintenance & Repair</SelectItem>
-            <SelectItem value="safety-compliance">Safety & Compliance</SelectItem>
-            <SelectItem value="training-support">Training & Support</SelectItem>
-            <SelectItem value="other">Other</SelectItem>
-          </SelectContent>
-        </Select>
+        <label htmlFor="email" className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+          <Mail className="w-4 h-4 mr-2 text-blue-600" />
+          Email Address
+        </label>
+        <input
+          type="email"
+          id="email"
+          {...register('email')}
+          disabled={isSubmitting}
+          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed ${
+            errors.email ? 'border-red-500' : 'border-gray-300'
+          }`}
+          placeholder="john@example.com"
+        />
+        {errors.email && (
+          <p className="mt-1.5 text-sm text-red-600 flex items-center">
+            <span className="w-1 h-1 bg-red-600 rounded-full mr-2"></span>
+            {errors.email.message}
+          </p>
+        )}
       </div>
 
       <div>
-        <Label htmlFor="message">Message *</Label>
-        <Textarea
+        <label htmlFor="contact" className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+          <Phone className="w-4 h-4 mr-2 text-blue-600" />
+          Contact Number
+        </label>
+        <input
+          type="tel"
+          id="contact"
+          {...register('contact')}
+          disabled={isSubmitting}
+          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed ${
+            errors.contact ? 'border-red-500' : 'border-gray-300'
+          }`}
+          placeholder="+971 50 123 4567"
+        />
+        {errors.contact && (
+          <p className="mt-1.5 text-sm text-red-600 flex items-center">
+            <span className="w-1 h-1 bg-red-600 rounded-full mr-2"></span>
+            {errors.contact.message}
+          </p>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="message" className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+          <MessageSquare className="w-4 h-4 mr-2 text-blue-600" />
+          Message
+        </label>
+        <textarea
           id="message"
-          required
+          {...register('message')}
+          disabled={isSubmitting}
           rows={5}
-          value={formData.message}
-          onChange={(e) => handleChange('message', e.target.value)}
+          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white resize-none disabled:opacity-50 disabled:cursor-not-allowed ${
+            errors.message ? 'border-red-500' : 'border-gray-300'
+          }`}
           placeholder="Tell us about your project requirements..."
-          className="mt-1"
         />
+        {errors.message && (
+          <p className="mt-1.5 text-sm text-red-600 flex items-center">
+            <span className="w-1 h-1 bg-red-600 rounded-full mr-2"></span>
+            {errors.message.message}
+          </p>
+        )}
       </div>
 
-      <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
-        Send Message
-      </Button>
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl flex items-center justify-center"
+      >
+        {isSubmitting ? (
+          <>
+            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+            Sending...
+          </>
+        ) : (
+          <>
+            <Send className="w-5 h-5 mr-2" />
+            Send Message
+          </>
+        )}
+      </button>
     </form>
   );
 }
