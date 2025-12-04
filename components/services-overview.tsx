@@ -60,33 +60,64 @@ export function ServicesOverview() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {services.map((service, index) => (
-            <Link
-              key={index}
-              href={service.link}
-              className="group relative bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl border border-slate-200 hover:border-blue-200 transition-all duration-300 hover:-translate-y-1"
-            >
-              <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-500 text-white rounded-xl mb-5 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-blue-500/25">
-                <service.icon className="w-7 h-7" />
-              </div>
+        <div className="mb-12 space-y-6">
+          <div className="flex flex-wrap justify-center gap-6">
+            {services.slice(0, 3).map((service, index) => (
+              <Link
+                key={index}
+                href={service.link}
+                className="group relative bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl border border-slate-200 hover:border-blue-200 transition-all duration-300 hover:-translate-y-1 w-full md:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)] max-w-sm"
+              >
+                <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-500 text-white rounded-xl mb-5 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-blue-500/25">
+                  <service.icon className="w-7 h-7" />
+                </div>
 
-              <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors">
-                {service.title}
-              </h3>
+                <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors">
+                  {service.title}
+                </h3>
 
-              <p className="text-slate-600 leading-relaxed mb-4">
-                {service.description}
-              </p>
+                <p className="text-slate-600 leading-relaxed mb-4">
+                  {service.description}
+                </p>
 
-              <div className="flex items-center text-blue-600 font-semibold text-sm group-hover:text-blue-700">
-                <span>Learn More</span>
-                <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </div>
+                <div className="flex items-center text-blue-600 font-semibold text-sm group-hover:text-blue-700">
+                  <span>Learn More</span>
+                  <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </div>
 
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-50 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
-            </Link>
-          ))}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-50 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
+              </Link>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-6">
+            {services.slice(3).map((service, index) => (
+              <Link
+                key={index + 3}
+                href={service.link}
+                className="group relative bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl border border-slate-200 hover:border-blue-200 transition-all duration-300 hover:-translate-y-1 w-full md:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)] max-w-sm"
+              >
+                <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-500 text-white rounded-xl mb-5 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-blue-500/25">
+                  <service.icon className="w-7 h-7" />
+                </div>
+
+                <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors">
+                  {service.title}
+                </h3>
+
+                <p className="text-slate-600 leading-relaxed mb-4">
+                  {service.description}
+                </p>
+
+                <div className="flex items-center text-blue-600 font-semibold text-sm group-hover:text-blue-700">
+                  <span>Learn More</span>
+                  <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </div>
+
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-50 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
+              </Link>
+            ))}
+          </div>
         </div>
 
         <div className="text-center">
@@ -102,4 +133,3 @@ export function ServicesOverview() {
     </section>
   );
 }
- 
