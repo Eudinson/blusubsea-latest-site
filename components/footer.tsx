@@ -90,7 +90,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/services/wet-hyperbaric-welding" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/services/wet-and-hyperbaric-services" className="text-gray-400 hover:text-white transition-colors">
                   Welding Services
                 </Link>
               </li>
