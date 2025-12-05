@@ -10,7 +10,7 @@ export default function ProjectsPage() {
       <div className="relative h-[700px] flex items-center justify-center overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/assets/images/projects/background/rov_pipeline_bg.jpg')" }}
+          style={{ backgroundImage: "url('/assets/images/projects/project_bg.jpg')" }}
         ></div>
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/70 via-blue-800/60 to-cyan-900/70"></div>
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">

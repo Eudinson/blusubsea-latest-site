@@ -16,7 +16,7 @@ const offices = [
     company: 'Blu Subsea Diving Services LLC',
     address: 'Office 13/14, The Iridium Building, Al Barsha, Dubai, UAE',
     phone: '+971 4 555 0123',
-    email: 'dubai@blusubsea.com',
+    email: 'operations@blusubsea.com',
     coordinates: { lat: 25.11876968291871, lng: 55.207364114945236 }
   },
   {
@@ -25,25 +25,25 @@ const offices = [
     company: 'Blu Subsea Marine Services LLC',
     address: 'Office 203, Al Zubara Tower, Salam Street, Abu Dhabi, UAE',
     phone: '+971 2 555 0124',
-    email: 'abudhabi@blusubsea.com',
+    email: 'operations@blusubsea.com',
     coordinates: { lat: 24.49020305610056, lng: 54.37952951309109 }
   },
   {
     id: 'egypt',
     name: 'Egypt',
-    company: 'BluSubSea Egypt',
+    company: 'Blu Subsea Egypt',
     address: '93 Ismail Mehana Str, El Labanne, Alexandria, Egypt',
     phone: '+20 3 392 8061',
-    email: 'egypt@blusubsea.com',
+    email: 'operations@blusubsea.com',
     coordinates: { lat: 31.201975828681377, lng: 29.911137047281002 }
   },
   {
     id: 'qatar',
     name: 'Qatar',
-    company: 'BluSubSea Qatar',
+    company: 'Blu Subsea Qatar',
     address: '3404-3405, Palm Tower B, West Bay, Doha, Qatar',
     phone: '+974 4 555 0125',
-    email: 'qatar@blusubsea.com',
+    email: 'operations@blusubsea.com',
     coordinates: { lat: 25.31845515186543, lng: 51.52745362541843 }
   }
 ];
@@ -51,7 +51,7 @@ const offices = [
 export default function Maps() {
   const [selectedOffice, setSelectedOffice] = useState(0);
   const currentOffice = offices[selectedOffice];
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAP_ID || '';
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '';
 
   return (
     <div className="space-y-12">
