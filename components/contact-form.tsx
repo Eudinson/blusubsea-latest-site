@@ -18,7 +18,6 @@ const contactSchema = z.object({
 type ContactFormData = z.infer<typeof contactSchema>;
 
 export default function ContactForm() {
-  const formRef = useRef<HTMLFormElement>(null);
   const {
     register,
     handleSubmit,
@@ -30,33 +29,36 @@ export default function ContactForm() {
 
   const onSubmit = async (data: ContactFormData) => {
     try {
-      const serviceId = process.env.NEXT_PUBLIC_SERVICE_ID;
-      const templateId = process.env.NEXT_PUBLIC_TEMPLATE_ID;
-      const userId = process.env.NEXT_PUBLIC_USER_ID;
+      const serviceId = process.env.NEXT_PUBLIC_SERVICE_ID!;
+      const templateId = process.env.NEXT_PUBLIC_TEMPLATE_ID!;
+      const userId = process.env.NEXT_PUBLIC_USER_ID!;
 
-      if (!serviceId || !templateId || !userId) {
-        toast.error('Email service is not configured. Please contact support.');
-        return;
-      }
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          full_name: data.full_name,
+          email: data.email,
+          contact: data.contact,
+          message: data.message
+        },
+        userId
+      );
 
-      if (formRef.current) {
-        await emailjs.sendForm(serviceId, templateId, formRef.current, userId);
-        toast.success('Message sent successfully!', {
-          description: 'We will get back to you within 24 hours.',
-          icon: <CheckCircle2 className="w-5 h-5" />
-        });
-        reset();
-      }
+      toast.success('Message sent successfully!', {
+        description: 'We will get back to you within 24 hours.'
+      });
+
+      reset();
     } catch (error) {
       console.error('Email send error:', error);
-      toast.error('Failed to send message', {
-        description: 'Please try again or contact us directly via phone.'
-      });
+      toast.error('Failed to send message');
     }
   };
 
+
   return (
-    <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       <div>
         <label htmlFor="full_name" className="flex items-center text-sm font-semibold text-gray-700 mb-2">
           <User className="w-4 h-4 mr-2 text-blue-600" />
@@ -67,9 +69,8 @@ export default function ContactForm() {
           id="full_name"
           {...register('full_name')}
           disabled={isSubmitting}
-          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed ${
-            errors.full_name ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed ${errors.full_name ? 'border-red-500' : 'border-gray-300'
+            }`}
           placeholder="John Doe"
         />
         {errors.full_name && (
@@ -90,9 +91,8 @@ export default function ContactForm() {
           id="email"
           {...register('email')}
           disabled={isSubmitting}
-          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed ${
-            errors.email ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed ${errors.email ? 'border-red-500' : 'border-gray-300'
+            }`}
           placeholder="john@example.com"
         />
         {errors.email && (
@@ -113,9 +113,8 @@ export default function ContactForm() {
           id="contact"
           {...register('contact')}
           disabled={isSubmitting}
-          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed ${
-            errors.contact ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed ${errors.contact ? 'border-red-500' : 'border-gray-300'
+            }`}
           placeholder="+971 50 123 4567"
         />
         {errors.contact && (
@@ -136,9 +135,8 @@ export default function ContactForm() {
           {...register('message')}
           disabled={isSubmitting}
           rows={5}
-          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white resize-none disabled:opacity-50 disabled:cursor-not-allowed ${
-            errors.message ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white resize-none disabled:opacity-50 disabled:cursor-not-allowed ${errors.message ? 'border-red-500' : 'border-gray-300'
+            }`}
           placeholder="Tell us about your project requirements..."
         />
         {errors.message && (
